@@ -1,20 +1,32 @@
-import React, { Component } from 'react';
-// import { NavLink } from 'react-router-dom';
-class Navbar extends Component {
-  render() {
-    return (
-      <nav className="nav-style">
-      <ul >
+import React from 'react';
+import {Link, withRouter} from 'react-router-dom';
+import auth0Client from '../Auth';
 
-        Navbar
-        {/* <li><NavLink exact to='/' activeClassName="selected">Flights                                                                                                                                                                                                                                                                                                                                                                                </NavLink></li> */}
-        {/* <li><NavLink  to='/Signup' activeClassName="selected">Signup</NavLink></li>
-        <li><NavLink  to='/Signin' activeClassName="selected">Signin</NavLink></li> */}
-        {/* <li><NavLink  to='/myDashboard' activeClassName="selected" >My dashboard</NavLink></li> */}
-      </ul>
+function NavBar(props) {
+  const signOut = () => {
+    auth0Client.signOut();
+    props.history.replace('/');
+  };
+
+  return (
+    <nav className="navbar navbar-dark bg-primary fixed-top">
+      <Link className="navbar-brand" to="/">Home
+        
+      </Link>
+      {
+        !auth0Client.isAuthenticated() &&
+        <button className="btn btn-dark" onClick={auth0Client.signIn}>Sign In</button>
+      }
+      {
+        auth0Client.isAuthenticated() &&
+        <div>
+          <img width="50px" src={auth0Client.getProfile().picture} alt="logo" />
+          <label className="mr-2 text-white">{auth0Client.getProfile().name}</label>
+          <button className="btn btn-dark" onClick={() => {signOut()}}>Sign Out</button>
+        </div>
+      }
     </nav>
-    );
-  }
+  );
 }
 
-export default Navbar;
+export default withRouter(NavBar);

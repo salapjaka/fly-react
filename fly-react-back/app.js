@@ -8,10 +8,10 @@ const hbs          = require('hbs');
 const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
-
+// const cors         = require('cors');
 
 mongoose
-  .connect('mongodb://localhost/fly-react-back', {useNewUrlParser: true})
+  .connect('mongodb://localhost:27017/fly-react-back', {useNewUrlParser: true})
   .then(x => {
     console.log(`Connected to Mongo! Database name: "${x.connections[0].name}"`)
   })
@@ -24,12 +24,23 @@ const debug = require('debug')(`${app_name}:${path.basename(__filename).split('.
 
 const app = express();
 
+
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+  if (req.method === 'OPTIONS') {
+      return res.send(204);
+  }
+  next();
+});
 // Middleware Setup
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// app.use(cors());
 // Express View engine setup
 
 app.use(require('node-sass-middleware')({

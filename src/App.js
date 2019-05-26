@@ -4,24 +4,44 @@ import Flights from './Components/Flights';
 import { Switch, Route } from 'react-router-dom';
 import Navbar from './Components/Navbar'
 import FlightDetail from './Components/FlightDetail'
-// import Auth from './Components/Auth';
-
-// let APP_API = process.env.REACT_APP_FLY_API_KEY
-// console.log(APP_API)
-// const auth = new Auth();
-// auth.login();
+import Callback from './Callback';
+import Secret from './Components/Secret'
+import auth0Client from './Auth'
+import Axios from 'axios';
 
 
 class App extends React.Component {
+state={}  
 
-  
-  render(){  
+
+setUser = (user) => {
+  this.setState({user})
+}
+
+componentWillMount(){
+  console.log('profile??????', auth0Client)
+    console.log('idtoken', auth0Client.getIdToken())
+    console.log('profile', auth0Client.getProfile())
+    let user = auth0Client.getProfile()
+    console.log('user',user)
+    this.setState({
+      user
+    })
+    //sign up or log in? 
+    Axios.post('http://localhost:5000/doiexist', { user }).then(res=>{
+      console.log("well?", res)
+    }).catch(err=>console.error(err))
+  }
+render(){  
+
     return (
-    <div className="App">
+    <div className="App">    
       <Navbar />
+      <br></br>
       <Switch>
           <Route exact path='/' component={Flights}/>
-          <Route path='/flightDetail' component={FlightDetail}/>
+          <Route exact path='/callback' component={()=>< Callback />}/>
+          <Secret exact path='/flightdetail/:id' component={() => <FlightDetail user={this.state.user}/>}/>
       </Switch>
     </div>
   );

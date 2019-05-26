@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
 import Axios from 'axios'
 import {Link} from 'react-router-dom'
+import moment from 'moment'
+// import auth0Client from '../Auth';
+
 
 var t;
 
+
 class Flights extends Component {
 
-  constructor(props) {
-    super(props);
-    // Don't do this!
-    this.state = {
+  state = {
       carriers: [],
       quotes: [],
       places: [],
       originPlace: 'MIA-sky',
       destinationPlace: 'ATH-sky',
-      outboundPartialDate: '2019-05-29',
-      inboundPartialDate: '2019-05-29'
+      outboundPartialDate: '',
+      inboundPartialDate: ''
     }
-   }
+
+
+   
 
 
   getFlights = (e) => {
@@ -74,33 +77,71 @@ class Flights extends Component {
   }
 
   showFlights = () => {
-    console.log(this.state.quotes)
+    // console.log(this.state.quotes)
+
+
     const flights = this.state.quotes.map((q,i)=>{
       let result = {
 
       },
       flightPlaces = {
-        origin: this.state.places.find((el)=>{return el.PlaceId == q.OutboundLeg.OriginId}).CityName,
-        destination: this.state.places.find((el)=>{return el.PlaceId == q.OutboundLeg.DestinationId}).CityName
+        origin: this.state.places.find((el)=>{
+          return el.PlaceId === q.OutboundLeg.OriginId}).CityName,
+        destination: this.state.places.find((el)=>{
+          return el.PlaceId === q.OutboundLeg.DestinationId}).CityName
       }
+      
       result.quote = q
-      result.carrier = this.state.carriers.find((el)=>{ return el.CarrierId == q.OutboundLeg.CarrierIds[0] });
+      result.carrier = this.state.carriers.find((el)=>{ 
+        return el.CarrierId === q.OutboundLeg.CarrierIds[0] });
       result.date = result.quote.OutboundLeg.DepartureDate;
       result.flightPlaces = flightPlaces;
-    
+  
       return result;
     });
     // 
+
+    // var flightTimes = this.randomTime(flights.length);
+    // console.log( 'times?', flightTimes );
     return flights.map((flight, i) => {
       console.log('each', flight);
+      
       return <div>
         <Link key={i}
-        to={`/flightDetail/${flight.quote.QuoteId}`}>
-      {flight.quote.QuoteId} - Carrier: {flight.carrier.Name} - Date: {flight.date} - From {flight.flightPlaces.origin} - To {flight.flightPlaces.destination}
+        to={`/flightdetail/${flight.quote.QuoteId}`}>
+      <div>{flight.quote.QuoteId} 
+      - Carrier: {flight.carrier.Name} 
+      - Date: {flight.date} 
+      {/* - Time: {flight.flightTimes} */}
+      - From {flight.flightPlaces.origin} 
+      - To {flight.flightPlaces.destination}
+      </div>
       </Link>
       </div>
     })
-  }
+}
+
+  // randomTime = (len) => {
+  //   let flightTimes = []
+  //   for(let l=0;l<len;l++){
+  //   // var hrs = Math.round(Math.random()*12);
+  //   // var mins = Math.round(Math.random()*60);    
+  //   // var hFormat = (hrs<10 ? "0" : "");
+  //   // var mFormat = (mins<10 ? "0" : "");
+  //   // var amPm = (hrs<12 ? "AM" : "PM");
+  //   // //return String(hFormat+hrs+ ":" +mFormat+mins+ " " +amPm);
+  //   //   flightTimes.push(String(hFormat+hrs+ ":" +mFormat+mins+ " " +amPm))
+  //   // }
+  //   var mmt = moment();
+  //   var mmtMidnight = mmt.clone().startOf('day');
+  //   var diff = mmt.diff(mmtMidnight);
+  //   var randomTime = moment(Math.floor(Math.random()*diff) + Date.now()).format('LTS')
+  //   flightTimes.push(randomTime)
+  //   }
+  //   console.log('flightTimes',flightTimes.sort())
+  //   return flightTimes.sort()
+
+  // }
 
   handleDates = (e) => {
     let val = e.target.value
@@ -118,8 +159,7 @@ class Flights extends Component {
   
   render() {
     return (
-      <div>
-        <br></br>
+      <div className="container">
       
       <form onSubmit ={this.getFlights}>
         <input type="text" name="originPlace" value="Miami" onChange={this.searchFlights} placeholder="origin....." />                                                                                                                                            
@@ -142,6 +182,7 @@ class Flights extends Component {
         </form>
        {this.showFlights()}
       </div>
+     
     );
   }
 }

@@ -7,6 +7,8 @@ function NavBar(props) {
     auth0Client.signOut();
     props.history.replace('/');
   };
+console.log(auth0Client.getProfile())
+props.setUser(auth0Client.getProfile())
 
   return (
     <nav className="navbar navbar-dark bg-primary fixed-top">

@@ -15,28 +15,41 @@ state={}
 
 
 setUser = (user) => {
-  this.setState({user})
-}
-
-componentWillMount(){
-  console.log('profile??????', auth0Client)
-    console.log('idtoken', auth0Client.getIdToken())
-    console.log('profile', auth0Client.getProfile())
-    let user = auth0Client.getProfile()
-    console.log('user',user)
-    this.setState({
-      user
-    })
-    //sign up or log in? 
-    Axios.post('http://localhost:5000/doiexist', { user }).then(res=>{
+  // this.setState({user})
+  console.log(user)
+  Axios.post('http://localhost:5000/doiexist', { user }).then(res=>{
       console.log("well?", res)
     }).catch(err=>console.error(err))
+
+}
+
+signin=()=>{
+  auth0Client.signIn().then(user=>{
+    console.log("user",user)
+  })
+}
+componentWillMount(){
+  console.log(auth0Client.getProfile())
+  
+  // console.log('profile??????', auth0Client)
+  //   console.log('idtoken', auth0Client.getIdToken())
+  //   console.log('profile', auth0Client.getProfile())
+  //   let user = auth0Client.getProfile()
+  //   console.log('user',user)
+  //   this.setState({
+  //     user
+    // })
+    // //sign up or log in? 
+    // Axios.post('http://localhost:5000/doiexist', { user }).then(res=>{
+    //   console.log("well?", res)
+    // }).catch(err=>console.error(err))
   }
 render(){  
 
     return (
     <div className="App">    
-      <Navbar />
+      <Navbar setUser={this.setUser}/>
+      
       <br></br>
       <Switch>
           <Route exact path='/' component={Flights}/>

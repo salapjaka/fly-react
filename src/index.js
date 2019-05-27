@@ -5,10 +5,11 @@ import App from './App';
 // import Auth from './Auth'
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom';
+import Main from './Components/Main'
 
 ReactDOM.render(
 <Router>
-<App />
+<Main />
 </Router>, document.getElementById('root'));
 
 

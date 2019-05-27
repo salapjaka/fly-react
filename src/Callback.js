@@ -4,7 +4,9 @@ import auth0Client from './Auth';
 
 class Callback extends Component {
   async componentDidMount() {
-    await auth0Client.handleAuthentication();
+    
+    let x=await auth0Client.handleAuthentication();
+    console.log(x)
     this.props.history.replace('/');
   }
 

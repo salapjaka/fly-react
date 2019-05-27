@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Axios from 'axios'
 import {Link} from 'react-router-dom'
 import moment from 'moment'
+import Navbar from './Navbar';
 // import auth0Client from '../Auth';
 
 
@@ -15,7 +16,7 @@ class Flights extends Component {
       quotes: [],
       places: [],
       originPlace: 'MIA-sky',
-      destinationPlace: 'ATH-sky',
+      destinationPlace: 'SYDA-sky',
       outboundPartialDate: '',
       inboundPartialDate: ''
     }
@@ -108,7 +109,7 @@ class Flights extends Component {
       
       return <div>
         <Link key={i}
-        to={`/flightdetail/${flight.quote.QuoteId}`}>
+        to={`/flightdetail/${flight.quote.QuoteId}?date=${flight.date}&to=${flight.flightPlaces.destination}&from=${flight.flightPlaces.origin}&carrier=${flight.carrier.Name}`}>
       <div>{flight.quote.QuoteId} 
       - Carrier: {flight.carrier.Name} 
       - Date: {flight.date} 
@@ -160,11 +161,11 @@ class Flights extends Component {
   render() {
     return (
       <div className="container">
-      
+     
       <form onSubmit ={this.getFlights}>
         <input type="text" name="originPlace" value="Miami" onChange={this.searchFlights} placeholder="origin....." />                                                                                                                                            
 
-        <input type="text" name="destinationPlace" value="Athens" onChange={this.searchFlights} placeholder="destination....." />
+        <input type="text" name="destinationPlace" value="Sydney" onChange={this.searchFlights} placeholder="destination....." />
         <br></br>
         Origin: {this.state.originPlace} 
         <br></br>

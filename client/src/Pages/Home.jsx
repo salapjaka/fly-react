@@ -8,9 +8,6 @@ class Home extends Component {
     // }
 
 
-
-
-
     //Logout 
     logout = () => {
         fire.auth().signOut()

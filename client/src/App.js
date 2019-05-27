@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { Switch, Route } from "react-router-dom";
-import ReactLoading from "react-loading";
-
+// import ReactLoading from "react-loading";
+import Profile from './Pages/Profile'
 //Pages
 import Login from './Pages/Auth/Login'
 import Signup from './Pages/Auth/Signup'
-import Home from './Pages/Home'
-import LandingPage from './Pages/LandingPage'
+// import Home from './Pages/Home'
+import Navbar from './Pages/Navbar'
 
 //Firebase Settings
 import firebase from './config/Fire';
@@ -47,43 +47,19 @@ class App extends Component {
     render() {
         console.log("THIS IS FROM APP.JS=============", this.state.user.email)
         return (
-            <Fragment>
-
-                {this.state.user === null ? (
-                    <ReactLoading type="bubbles" color="green" height={'10%'} width={'10%'} />
-                ) : this.state.user === false ? (
-                    <Fragment>
+            <div>
+                        <Navbar user={this.state.user}/>
                         <Switch>
                             <Route exact path="/login" component={Login} />
                             <Route exact path="/signup" component={Signup} />
-                            {/* <Route exact path="/" component={LandingPage} /> */}
-                            <Route exact path="/" component={Flights} />
-                            <Route exact path="/flightdetail/:id" component={FlightDetail} />
-
+                            <Route exact path="/" component={ (props) => <Flights {...props} user={this.state.user} /> } />
+                            <Route exact path="/flightdetail/:id" component={ (props) => <FlightDetail {...props} user={this.state.user} />} />
+                            <Route exact path="/profile/:uid" component={ (props) => <Profile {...props} uid={this.state.user.uid} />} />
                         </Switch>
-                    </Fragment>
-                ) : (
-                            <Fragment>
-                                <Switch>
-                                    <Route exact path="/" user={this.state.user} component={Home} />
-                                </Switch>
-                            </Fragment>
-                        )}
-            </Fragment>
+                        </div>
         );
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 export default App;

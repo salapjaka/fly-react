@@ -45,6 +45,7 @@ app.use(require('node-sass-middleware')({
   sourceMap: true
 }));
 
+//app.set('view engine', 'hbs');
 
 // app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -62,8 +63,10 @@ app.use(function (req, res, next) {
   next();
 });
 
+
+
 // default value for title local
-app.locals.title = 'Iron Budget';
+app.locals.title = 'Fly react';
 
 
 
